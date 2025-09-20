@@ -7,7 +7,7 @@ const cors = require("cors");
 
 app.use(
   cors({
-    origin: "http://localhost:5174", // Especificamos el origen permitido
+    origin: "http://localhost:5173", // Especificamos el origen permitido
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     // credentials: true, // Permitir el envio de cookies y autenticacion
     allowedHeaders: ["Authorization", "Content-Type"], // Permitir headers necesarios

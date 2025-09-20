@@ -13,6 +13,13 @@ const getMarcas = async (req, res) => {
   }
 };
 
+const getImage = async (req, res) => {
+  const data = await req.formData();
+  console.log(data);
+  res.json({ message: "Imagen subida" });
+};
+
 module.exports = {
   getMarcas,
+  getImage,
 };

@@ -6,11 +6,12 @@ const {
 } = require("../../controllers/uploadController/upload.controller");
 
 const router = express.Router();
-// Usar memoryStorage para recibir la imagen en el backend y procesarla
+// Usar memoryStorage para recibir las imágenes en el backend y procesarlas
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: {
     fileSize: 5 * 1024 * 1024, // límite de 5MB por archivo
+    files: 10, // máximo 10 archivos por petición
   },
   fileFilter: (req, file, cb) => {
     // Verificar que sea una imagen
@@ -22,6 +23,7 @@ const upload = multer({
   },
 });
 
-router.post("/upload", upload.single("image"), uploadImage);
+// Ruta para subir múltiples imágenes
+router.post("/upload", upload.array("images", 10), uploadImage); // máximo 10 imágenes
 
 module.exports = router;

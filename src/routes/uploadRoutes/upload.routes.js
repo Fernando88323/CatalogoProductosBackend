@@ -3,6 +3,9 @@ const express = require("express");
 const multer = require("multer");
 const {
   uploadImage,
+  getProductos,
+  getProductoById,
+  getImagenesProducto,
 } = require("../../controllers/uploadController/upload.controller");
 
 const router = express.Router();
@@ -25,5 +28,18 @@ const upload = multer({
 
 // Ruta para subir múltiples imágenes
 router.post("/upload", upload.array("images", 10), uploadImage); // máximo 10 imágenes
+
+// ============================================
+// RUTAS PARA OBTENER DATOS
+// ============================================
+
+// Obtener todos los productos con sus imágenes
+router.get("/productos", getProductos);
+
+// Obtener un producto específico por ID con sus imágenes
+router.get("/productos/:id", getProductoById);
+
+// Obtener solo las imágenes de un producto específico
+router.get("/productos/:id/imagenes", getImagenesProducto);
 
 module.exports = router;

@@ -187,3 +187,204 @@ exports.uploadImage = async (req, res) => {
     });
   }
 };
+
+// ============================================
+// CONTROLADORES PARA RECUPERAR DATOS
+// ============================================
+
+// Controlador: obtener todos los productos con sus imágenes
+exports.getProductos = async (req, res) => {
+  try {
+    console.log("Obteniendo todos los productos con imágenes...");
+
+    // Query para obtener productos con sus categorías y marcas
+    const productosQuery = `
+      SELECT 
+        p.id,
+        p.nombre,
+        p.descripcion,
+        p.precio,
+        p.stock,
+        p.slug,
+        p.activo,
+        p.fecha_creacion,
+        p.fecha_actualizacion,
+        c.nombre as categoria_nombre,
+        c.id as categoria_id,
+        m.nombre as marca_nombre,
+        m.id as marca_id
+      FROM productos p
+      LEFT JOIN categorias c ON p.categoria_id = c.id
+      LEFT JOIN marcas m ON p.marca_id = m.id
+      WHERE p.activo = TRUE
+      ORDER BY p.fecha_creacion DESC
+    `;
+
+    const [productos] = await pool.execute(productosQuery);
+
+    // Para cada producto, obtener sus imágenes
+    for (let producto of productos) {
+      const imagenesQuery = `
+        SELECT id, image_url, public_id, fecha_creacion
+        FROM imagenes_productos 
+        WHERE producto_id = ?
+        ORDER BY fecha_creacion ASC
+      `;
+
+      const [imagenes] = await pool.execute(imagenesQuery, [producto.id]);
+      producto.imagenes = imagenes;
+    }
+
+    res.json({
+      success: true,
+      message: `${productos.length} productos encontrados`,
+      data: productos,
+    });
+
+    console.log(
+      `Respuesta enviada: ${productos.length} productos con imágenes`
+    );
+  } catch (err) {
+    console.error("Error obteniendo productos:", err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+      message: "Error al obtener los productos",
+    });
+  }
+};
+
+// Controlador: obtener un producto específico por ID con sus imágenes
+exports.getProductoById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id || isNaN(id)) {
+      return res.status(400).json({
+        success: false,
+        error: "ID de producto inválido",
+      });
+    }
+
+    console.log(`Obteniendo producto ID: ${id} con imágenes...`);
+
+    // Query para obtener el producto específico
+    const productoQuery = `
+      SELECT 
+        p.id,
+        p.nombre,
+        p.descripcion,
+        p.precio,
+        p.stock,
+        p.slug,
+        p.activo,
+        p.fecha_creacion,
+        p.fecha_actualizacion,
+        c.nombre as categoria_nombre,
+        c.id as categoria_id,
+        c.descripcion as categoria_descripcion,
+        m.nombre as marca_nombre,
+        m.id as marca_id,
+        m.descripcion as marca_descripcion
+      FROM productos p
+      LEFT JOIN categorias c ON p.categoria_id = c.id
+      LEFT JOIN marcas m ON p.marca_id = m.id
+      WHERE p.id = ? AND p.activo = TRUE
+    `;
+
+    const [productos] = await pool.execute(productoQuery, [id]);
+
+    if (productos.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Producto no encontrado",
+      });
+    }
+
+    const producto = productos[0];
+
+    // Obtener las imágenes del producto
+    const imagenesQuery = `
+      SELECT id, image_url, public_id, fecha_creacion
+      FROM imagenes_productos 
+      WHERE producto_id = ?
+      ORDER BY fecha_creacion ASC
+    `;
+
+    const [imagenes] = await pool.execute(imagenesQuery, [id]);
+    producto.imagenes = imagenes;
+
+    res.json({
+      success: true,
+      message: "Producto encontrado",
+      data: producto,
+    });
+
+    console.log(`Producto ${id} encontrado con ${imagenes.length} imágenes`);
+  } catch (err) {
+    console.error("Error obteniendo producto por ID:", err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+      message: "Error al obtener el producto",
+    });
+  }
+};
+
+// Controlador: obtener solo las imágenes de un producto
+exports.getImagenesProducto = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!id || isNaN(id)) {
+      return res.status(400).json({
+        success: false,
+        error: "ID de producto inválido",
+      });
+    }
+
+    console.log(`Obteniendo imágenes del producto ID: ${id}...`);
+
+    // Verificar que el producto existe
+    const [producto] = await pool.execute(
+      "SELECT id, nombre FROM productos WHERE id = ? AND activo = TRUE",
+      [id]
+    );
+
+    if (producto.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Producto no encontrado",
+      });
+    }
+
+    // Obtener las imágenes
+    const imagenesQuery = `
+      SELECT id, image_url, public_id, fecha_creacion
+      FROM imagenes_productos 
+      WHERE producto_id = ?
+      ORDER BY fecha_creacion ASC
+    `;
+
+    const [imagenes] = await pool.execute(imagenesQuery, [id]);
+
+    res.json({
+      success: true,
+      message: `${imagenes.length} imágenes encontradas para el producto "${producto[0].nombre}"`,
+      data: {
+        producto_id: id,
+        producto_nombre: producto[0].nombre,
+        imagenes: imagenes,
+      },
+    });
+
+    console.log(`${imagenes.length} imágenes encontradas para producto ${id}`);
+  } catch (err) {
+    console.error("Error obteniendo imágenes del producto:", err);
+    res.status(500).json({
+      success: false,
+      error: err.message,
+      message: "Error al obtener las imágenes del producto",
+    });
+  }
+};

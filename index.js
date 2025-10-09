@@ -7,7 +7,7 @@ const app = express();
 
 // Middlewares - en orden correcto
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",").map(origin => origin.trim())
+  ? process.env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim())
   : ["http://localhost:5173"];
 
 console.log("🔧 CORS configurado para:", allowedOrigins);
@@ -19,7 +19,9 @@ app.use(
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = `CORS: El origen ${origin} no está permitido. Orígenes permitidos: ${allowedOrigins.join(", ")}`;
+        const msg = `CORS: El origen ${origin} no está permitido. Orígenes permitidos: ${allowedOrigins.join(
+          ", "
+        )}`;
         console.error(msg);
         return callback(new Error(msg), false);
       }

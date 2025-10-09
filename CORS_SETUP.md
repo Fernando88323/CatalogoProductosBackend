@@ -5,8 +5,8 @@
 Si ves este error en la consola del navegador:
 
 ```
-Access to fetch at 'https://catalogoproductosbackend-production-fcd1.up.railway.app/...' 
-from origin 'https://catalogo-productos-xxx.vercel.app' has been blocked by CORS policy: 
+Access to fetch at 'https://catalogoproductosbackend-production-fcd1.up.railway.app/...'
+from origin 'https://catalogo-productos-xxx.vercel.app' has been blocked by CORS policy:
 No 'Access-Control-Allow-Origin' header is present on the requested resource.
 ```
 
@@ -21,6 +21,7 @@ No 'Access-Control-Allow-Origin' header is present on the requested resource.
 Vercel genera diferentes URLs para cada deployment:
 
 1. **URL de Preview** (cambia con cada deployment):
+
    ```
    https://catalogo-productos-qd1u0vakk-fernandos-projects-9d4a6279.vercel.app
    ```
@@ -37,16 +38,19 @@ Vercel genera diferentes URLs para cada deployment:
 Ve a Railway Dashboard y agrega/actualiza la variable `ALLOWED_ORIGINS`:
 
 #### Opción A: Solo un dominio
+
 ```
 ALLOWED_ORIGINS=https://tu-proyecto.vercel.app
 ```
 
 #### Opción B: Múltiples dominios (recomendado)
+
 ```
 ALLOWED_ORIGINS=http://localhost:5173,https://catalogo-productos-qd1u0vakk-fernandos-projects-9d4a6279.vercel.app,https://tu-proyecto.vercel.app
 ```
 
 ⚠️ **IMPORTANTE:**
+
 - **NO uses espacios** después de las comas
 - **NO pongas `/` al final** de las URLs
 - **Incluye `http://` o `https://`**
@@ -77,10 +81,10 @@ En los logs de Railway, cuando inicie el servidor verás:
 Abre la consola del navegador (F12) y ejecuta:
 
 ```javascript
-fetch('https://catalogoproductosbackend-production-fcd1.up.railway.app/health')
-  .then(r => r.json())
+fetch("https://catalogoproductosbackend-production-fcd1.up.railway.app/health")
+  .then((r) => r.json())
   .then(console.log)
-  .catch(console.error)
+  .catch(console.error);
 ```
 
 - ✅ **Si funciona:** Verás el objeto JSON
@@ -106,17 +110,20 @@ ALLOWED_ORIGINS=http://localhost:5173,https://catalogo-productos-qd1u0vakk-ferna
 ### URLs a incluir:
 
 1. **Desarrollo local:**
+
    ```
    http://localhost:5173
    http://localhost:3000
    ```
 
 2. **Preview de Vercel (la URL actual del error):**
+
    ```
    https://catalogo-productos-qd1u0vakk-fernandos-projects-9d4a6279.vercel.app
    ```
 
 3. **Producción de Vercel (si tienes):**
+
    ```
    https://tu-proyecto.vercel.app
    ```
@@ -146,6 +153,7 @@ ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,https://catalogo-pro
 **Causa:** La URL del frontend no está en `ALLOWED_ORIGINS`
 
 **Solución:**
+
 1. Copia la URL exacta del error
 2. Agrégala a `ALLOWED_ORIGINS` en Railway
 3. Espera el redespliegue
@@ -155,6 +163,7 @@ ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,https://catalogo-pro
 **Causa:** El backend no está enviando los headers CORS correctos
 
 **Solución:**
+
 1. Verifica que `ALLOWED_ORIGINS` esté configurado en Railway
 2. Revisa los logs para ver si el backend está arrancando
 3. Asegúrate de que no hay espacios extra en las URLs
@@ -172,10 +181,12 @@ ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,https://catalogo-pro
 **Soluciones:**
 
 1. **Usar dominio de producción:**
+
    - Configura un dominio principal en Vercel
    - Usa solo ese dominio en `ALLOWED_ORIGINS`
 
 2. **Permitir todos los subdominios de Vercel (no recomendado):**
+
    - Modifica el código de CORS para usar regex
    - Permite `*.vercel.app`
 
@@ -198,9 +209,11 @@ ALLOWED_ORIGINS=http://localhost:5173,http://localhost:3000,https://catalogo-pro
 
 ```javascript
 // ❌ NO HAGAS ESTO EN PRODUCCIÓN
-app.use(cors({
-  origin: '*'  // Permite TODOS los dominios - inseguro
-}));
+app.use(
+  cors({
+    origin: "*", // Permite TODOS los dominios - inseguro
+  })
+);
 ```
 
 ---
@@ -233,18 +246,21 @@ ALLOWED_ORIGINS=http://localhost:5173,https://catalogo-productos-preview-xxx.ver
 
 ```javascript
 // Prueba simple
-fetch('https://catalogoproductosbackend-production-fcd1.up.railway.app/health')
-  .then(r => r.json())
-  .then(data => console.log('✅ CORS OK:', data))
-  .catch(err => console.error('❌ CORS Error:', err));
+fetch("https://catalogoproductosbackend-production-fcd1.up.railway.app/health")
+  .then((r) => r.json())
+  .then((data) => console.log("✅ CORS OK:", data))
+  .catch((err) => console.error("❌ CORS Error:", err));
 
 // Prueba con credenciales
-fetch('https://catalogoproductosbackend-production-fcd1.up.railway.app/marcas', {
-  credentials: 'include'
-})
-  .then(r => r.json())
-  .then(data => console.log('✅ Con credenciales:', data))
-  .catch(err => console.error('❌ Error:', err));
+fetch(
+  "https://catalogoproductosbackend-production-fcd1.up.railway.app/marcas",
+  {
+    credentials: "include",
+  }
+)
+  .then((r) => r.json())
+  .then((data) => console.log("✅ Con credenciales:", data))
+  .catch((err) => console.error("❌ Error:", err));
 ```
 
 ### 2. Desde curl:
@@ -259,6 +275,7 @@ curl -H "Origin: https://catalogo-productos-xxx.vercel.app" \
 ```
 
 Si está configurado correctamente, verás headers como:
+
 ```
 Access-Control-Allow-Origin: https://catalogo-productos-xxx.vercel.app
 Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
@@ -271,15 +288,18 @@ Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS
 Si después de configurar `ALLOWED_ORIGINS` sigues teniendo problemas:
 
 1. **Verifica la variable en Railway:**
+
    - Ve a Railway → Tu proyecto → Servicio Node.js → Variables
    - Verifica que `ALLOWED_ORIGINS` esté correctamente configurado
    - Sin espacios, sin `/` al final
 
 2. **Revisa los logs de Railway:**
+
    - Busca el mensaje: `🔧 CORS configurado para:`
    - Debe incluir tu dominio de Vercel
 
 3. **Verifica el error exacto:**
+
    - Copia la URL completa del error en la consola
    - Asegúrate de que esté en `ALLOWED_ORIGINS`
 

@@ -1,8 +1,106 @@
-# 🚀 Guía de Despliegue a Producción
+# 🚀 Guía de Despliegue a Railway
 
-## ✅ Cambios Realizados
+## ⚠️ PROBLEMA COMÚN: Error de conexión a la base de datos
 
-### 1. Archivos Creados
+### Error:
+
+```
+❌ Error de conexión a la DB: connect ECONNREFUSED ::1:3306
+[dotenv@17.2.2] injecting env (0) from .env
+```
+
+### Causa:
+
+Railway **NO lee el archivo `.env`** porque este archivo no se sube a Git (está en `.gitignore`). Las variables de entorno deben configurarse directamente en Railway.
+
+---
+
+## 🔧 SOLUCIÓN: Configurar Variables de Entorno en Railway
+
+### Paso 1: Acceder a Railway
+
+1. Ve a https://railway.app
+2. Inicia sesión con tu cuenta
+3. Selecciona tu proyecto `CatalogoProductosBackend`
+4. Ve a la pestaña **"Variables"** o **"Settings > Variables"**
+
+### Paso 2: Agregar Variables de Entorno
+
+Copia y pega estas variables **UNA POR UNA** en Railway:
+
+```bash
+NODE_ENV=production
+PORT=8080
+HOST=tramway.proxy.rlwy.net
+USER=root
+DB_PORT=56180
+PSW=wYzXthBKkozVtXLsaLABOsoQsQIHtxaC
+DB=railway
+CLOUD_NAME=drfxzdtxm
+API_KEY=558114351582597
+API_SECRET=xZEhyj12f9cUo1nRfzpTCfaz65Y
+JWT_SECRET=catalogoProductosSecret2025
+ALLOWED_ORIGINS=https://tu-frontend-url.vercel.app
+```
+
+⚠️ **IMPORTANTE**:
+
+- Reemplaza `https://tu-frontend-url.vercel.app` con la URL real de tu frontend
+- Si tienes múltiples dominios, sepáralos con comas: `https://dominio1.com,https://dominio2.com`
+
+### Paso 3: Verificar la Base de Datos de Railway
+
+1. En Railway, ve a tu servicio de **MySQL**
+2. Copia las credenciales que Railway te proporciona
+3. Actualiza las variables `HOST`, `USER`, `DB_PORT`, `PSW`, y `DB` con esos valores
+
+**Ejemplo de variables de Railway MySQL:**
+
+```bash
+HOST=containers-us-west-123.railway.app
+USER=root
+DB_PORT=5432
+PSW=AbCdEfGhIjKlMnOpQrStUvWxYz
+DB=railway
+```
+
+### Paso 4: Redesplegar
+
+Después de configurar las variables:
+
+1. Ve a **"Deployments"**
+2. Haz clic en **"Redeploy"** o haz un nuevo commit a tu repositorio
+3. Espera a que termine el despliegue
+4. Verifica los logs para confirmar la conexión exitosa: `✅ Conectado a la DB`
+
+---
+
+## 📋 Checklist de Variables de Entorno
+
+- [ ] `NODE_ENV=production`
+- [ ] `PORT=8080`
+- [ ] `HOST` (de Railway MySQL)
+- [ ] `USER` (de Railway MySQL)
+- [ ] `DB_PORT` (de Railway MySQL)
+- [ ] `PSW` (de Railway MySQL)
+- [ ] `DB` (de Railway MySQL)
+- [ ] `CLOUD_NAME` (de Cloudinary)
+- [ ] `API_KEY` (de Cloudinary)
+- [ ] `API_SECRET` (de Cloudinary)
+- [ ] `JWT_SECRET`
+- [ ] `ALLOWED_ORIGINS` (URL de tu frontend)
+
+---
+
+## ✅ Cambios Realizados en el Código
+
+### 1. Mejoras en `src/database/config.js`
+
+- ✅ Soporte para `DATABASE_URL` (variable común de Railway)
+- ✅ Mejor manejo de errores con información detallada
+- ✅ Logs informativos para debugging
+
+### 2. Archivos Importantes
 
 - ✅ `.gitignore` - Para proteger archivos sensibles
 - ✅ `.env.example` - Plantilla de variables de entorno

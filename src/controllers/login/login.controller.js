@@ -83,20 +83,27 @@ const loginUser = async (req, res) => {
     // Generar JWT token
     const accessToken = generateToken(user.id, user.email);
 
-    console.log("Login exitoso para usuario:", email); // Log
+    console.log("✅ Login exitoso para usuario:", email);
+    console.log("🔑 Token generado (primeros caracteres):", accessToken.substring(0, 20) + "...");
 
-    // Establecer el token como cookie HTTP-only
+    // Para aplicaciones cross-domain (Railway + Vercel), es mejor enviar el token
+    // en el body en lugar de cookies, ya que las cookies tienen restricciones CORS
+    
+    // Opción 1: Establecer cookie (funciona solo en mismo dominio o con configuración especial)
     res.cookie("accessToken", accessToken, {
       httpOnly: true, // No accesible desde JavaScript del cliente
       secure: process.env.NODE_ENV === "production", // Solo HTTPS en producción
-      sameSite: "lax", // Protección CSRF (lax permite navegación entre sitios)
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // "none" para cross-domain en producción
       maxAge: 3 * 60 * 60 * 1000, // 3 horas (igual que el token)
     });
 
+    // Opción 2: Enviar token en el body (RECOMENDADO para cross-domain)
+    // El frontend debe guardarlo en localStorage o sessionStorage y enviarlo en headers
     res.status(200).json({
       success: true,
       message: "Login exitoso",
       user: userWithoutPassword,
+      accessToken: accessToken, // ← AGREGAR ESTO para que el frontend pueda usarlo
     });
   } catch (error) {
     console.error("Error en loginUser:", error);

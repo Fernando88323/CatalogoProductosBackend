@@ -32,17 +32,7 @@ app.use(cookieParser()); // Parse cookies
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
-// Health check endpoint para Railway
-app.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "ok",
-    message: "Server is running",
-    timestamp: new Date().toISOString(),
-    env: process.env.NODE_ENV || "development",
-  });
-});
-
-// Ruta principal
+// Rutas principales (incluye /, /health, /marcas, /auth, /upload)
 app.use("/", require("./src/routes/index"));
 
 // Para manejar rutas no definidas

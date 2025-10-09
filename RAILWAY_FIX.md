@@ -1,37 +1,81 @@
-# 🚨 SOLUCIÓN RÁPIDA: Error de Conexión en Railway
+# 🚨 SOLUCIÓN RÁPIDA: Error "Application failed to respond" en Railway
 
 ## Error:
+```
+Application failed to respond
+```
 
+O también:
 ```
 ❌ Error de conexión a la DB: connect ECONNREFUSED ::1:3306
 ```
 
 ## Causa:
-
-Railway NO está leyendo las variables de entorno porque el archivo `.env` no se sube a Git.
+Railway NO está leyendo las variables de entorno porque el archivo `.env` no se sube a Git. La aplicación se inicia pero no puede conectarse a la base de datos.
 
 ---
 
-## 🔥 SOLUCIÓN RÁPIDA (3 pasos):
+## 🔥 SOLUCIÓN RÁPIDA (4 pasos):
 
-### 1️⃣ Ir a Railway Dashboard
+### 1️⃣ Verificar los Logs en Railway
 
-Ve a: https://railway.app → Tu Proyecto → **Variables**
+1. Ve a Railway Dashboard
+2. Selecciona tu proyecto
+3. Haz clic en tu servicio de Node.js
+4. Ve a la pestaña **"Deployments"**
+5. Haz clic en el deployment activo
+6. Ve a **"View Logs"**
 
-### 2️⃣ Copiar y Pegar estas Variables
+**¿Qué buscar en los logs?**
+- Si ves `❌ NO CONFIGURADO` para las variables → Falta configurar variables de entorno
+- Si dice "Application failed to respond" → El servidor no se está iniciando correctamente
 
-**IMPORTANTE:** Ve a tu servicio de MySQL en Railway y copia las credenciales reales que Railway te da.
+### 2️⃣ Encontrar las Credenciales de MySQL en Railway
 
-Luego agrega cada variable:
+**IMPORTANTE:** Railway tiene 2 servicios en tu proyecto:
+- 🟦 Servicio de **Node.js** (tu backend)
+- 🟩 Servicio de **MySQL** (tu base de datos)
+
+Para obtener las credenciales de MySQL:
+
+1. En Railway Dashboard, haz clic en el servicio de **MySQL** (NO el de Node.js)
+2. Ve a la pestaña **"Variables"** o **"Connect"**
+3. Verás variables como:
+   - `MYSQLHOST` o `MYSQL_HOST`
+   - `MYSQLUSER` o `MYSQL_USER`
+   - `MYSQLPORT` o `MYSQL_PORT`
+   - `MYSQLPASSWORD` o `MYSQL_PASSWORD`
+   - `MYSQLDATABASE` o `MYSQL_DATABASE`
+
+Copia esos valores.
+
+### 3️⃣ Configurar Variables en el Servicio de Node.js
+
+Ahora ve al servicio de **Node.js** (tu backend):
+
+1. Haz clic en el servicio de Node.js
+2. Ve a **"Variables"**
+3. Haz clic en **"+ New Variable"**
+4. Agrega TODAS estas variables UNA POR UNA:
 
 ```
 NODE_ENV=production
 PORT=8080
-HOST=<copia-el-host-de-railway-mysql>
-USER=<copia-el-user-de-railway-mysql>
-DB_PORT=<copia-el-port-de-railway-mysql>
-PSW=<copia-el-password-de-railway-mysql>
-DB=railway
+```
+
+Luego agrega las credenciales de MySQL que copiaste:
+
+```
+HOST=<pega-MYSQLHOST>
+USER=<pega-MYSQLUSER>
+DB_PORT=<pega-MYSQLPORT>
+PSW=<pega-MYSQLPASSWORD>
+DB=<pega-MYSQLDATABASE>
+```
+
+Y finalmente estas variables:
+
+```
 CLOUD_NAME=drfxzdtxm
 API_KEY=558114351582597
 API_SECRET=xZEhyj12f9cUo1nRfzpTCfaz65Y
@@ -39,10 +83,13 @@ JWT_SECRET=catalogoProductosSecret2025
 ALLOWED_ORIGINS=https://tu-frontend-url.com
 ```
 
-### 3️⃣ Redesplegar
+⚠️ **Reemplaza `https://tu-frontend-url.com` con la URL real de tu frontend**
 
-- Opción A: Haz un nuevo commit y push
-- Opción B: En Railway → Deployments → Redeploy
+### 4️⃣ Redesplegar
+
+Railway redesplegará automáticamente al agregar las variables. Si no lo hace:
+
+- En Railway → Deployments → **"Redeploy"**
 
 ---
 

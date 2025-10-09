@@ -32,6 +32,16 @@ app.use(cookieParser()); // Parse cookies
 app.use(express.json()); // Parse JSON bodies
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
+// Health check endpoint para Railway
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "ok",
+    message: "Server is running",
+    timestamp: new Date().toISOString(),
+    env: process.env.NODE_ENV || "development",
+  });
+});
+
 // Ruta principal
 app.use("/", require("./src/routes/index"));
 
@@ -52,7 +62,13 @@ app.use((err, req, res, next) => {
 });
 
 // Levantando el servidor
-app.set("puerto", process.env.PORT || 4001);
-app.listen(app.get("puerto"), () => {
-  console.log("Corriendo en el puerto:", app.get("puerto"));
+const PORT = process.env.PORT || 4001;
+const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+
+app.listen(PORT, HOST, () => {
+  console.log("=".repeat(50));
+  console.log(`🚀 Servidor corriendo en ${HOST}:${PORT}`);
+  console.log(`📝 Modo: ${process.env.NODE_ENV || "development"}`);
+  console.log(`🔗 Health check: http://${HOST}:${PORT}/health`);
+  console.log("=".repeat(50));
 });

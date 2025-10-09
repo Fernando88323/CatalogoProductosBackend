@@ -32,6 +32,7 @@ const pool = mysql.createPool(dbConfig);
   } catch (err) {
     console.error("❌ Error de conexión a la DB:", err.message);
     console.error("🔍 Verificando variables de entorno...");
+    console.error("   NODE_ENV:", process.env.NODE_ENV || "❌ NO CONFIGURADO");
     console.error("   HOST:", process.env.HOST || "❌ NO CONFIGURADO");
     console.error("   USER:", process.env.USER || "❌ NO CONFIGURADO");
     console.error("   DB_PORT:", process.env.DB_PORT || "❌ NO CONFIGURADO");
@@ -40,11 +41,13 @@ const pool = mysql.createPool(dbConfig);
       "   DATABASE_URL:",
       process.env.DATABASE_URL ? "✅ CONFIGURADO" : "❌ NO CONFIGURADO"
     );
-
-    if (process.env.NODE_ENV === "production") {
-      console.error("⚠️  En producción: saliendo del proceso...");
-      process.exit(1); // Salir en producción si no hay conexión
-    }
+    
+    console.error("\n⚠️  ATENCIÓN: La aplicación continuará ejecutándose pero sin conexión a BD.");
+    console.error("⚠️  Debes configurar las variables de entorno en Railway.");
+    console.error("⚠️  Ve a: Railway Dashboard → Tu Proyecto → Variables\n");
+    
+    // NO cerramos el proceso para que Railway pueda mostrar los logs
+    // El usuario podrá ver qué variables faltan
   }
 })();
 

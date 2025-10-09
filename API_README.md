@@ -13,9 +13,11 @@ https://catalogoproductosbackend-production-fcd1.up.railway.app
 ### 🏠 Información General
 
 #### `GET /`
+
 Información general de la API y endpoints disponibles.
 
 **Respuesta:**
+
 ```json
 {
   "message": "🚀 API Catálogo de Productos - Backend",
@@ -32,9 +34,11 @@ Información general de la API y endpoints disponibles.
 ```
 
 #### `GET /health`
+
 Verificar el estado del servidor.
 
 **Respuesta:**
+
 ```json
 {
   "status": "ok",
@@ -49,9 +53,11 @@ Verificar el estado del servidor.
 ### 🔐 Autenticación
 
 #### `POST /auth/login`
+
 Iniciar sesión y obtener token JWT.
 
 **Body:**
+
 ```json
 {
   "username": "usuario",
@@ -60,6 +66,7 @@ Iniciar sesión y obtener token JWT.
 ```
 
 **Respuesta exitosa:**
+
 ```json
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -75,14 +82,17 @@ Iniciar sesión y obtener token JWT.
 ### 🏷️ Marcas
 
 #### `GET /marcas`
+
 Obtener todas las marcas.
 
 **Headers:**
+
 ```
 Authorization: Bearer <token>
 ```
 
 **Respuesta:**
+
 ```json
 [
   {
@@ -95,18 +105,22 @@ Authorization: Bearer <token>
 ```
 
 #### `GET /marcas/:id`
+
 Obtener una marca específica.
 
 #### `POST /marcas`
+
 Crear una nueva marca.
 
 **Headers:**
+
 ```
 Authorization: Bearer <token>
 Content-Type: application/json
 ```
 
 **Body:**
+
 ```json
 {
   "nombre": "Nueva Marca",
@@ -116,9 +130,11 @@ Content-Type: application/json
 ```
 
 #### `PUT /marcas/:id`
+
 Actualizar una marca existente.
 
 #### `DELETE /marcas/:id`
+
 Eliminar una marca.
 
 ---
@@ -126,20 +142,24 @@ Eliminar una marca.
 ### 📤 Upload (Cloudinary)
 
 #### `POST /upload`
+
 Subir una imagen a Cloudinary.
 
 **Headers:**
+
 ```
 Authorization: Bearer <token>
 Content-Type: multipart/form-data
 ```
 
 **Body (form-data):**
+
 ```
 file: <archivo de imagen>
 ```
 
 **Respuesta:**
+
 ```json
 {
   "url": "https://res.cloudinary.com/...",
@@ -153,6 +173,7 @@ file: <archivo de imagen>
 ## 🔧 Configuración Local
 
 ### Requisitos
+
 - Node.js >= 14.0.0
 - MySQL
 - Cuenta de Cloudinary
@@ -160,12 +181,14 @@ file: <archivo de imagen>
 ### Instalación
 
 1. **Clonar el repositorio:**
+
 ```bash
 git clone https://github.com/Fernando88323/CatalogoProductosBackend.git
 cd CatalogoProductosBackend
 ```
 
 2. **Instalar dependencias:**
+
 ```bash
 npm install
 # o
@@ -192,11 +215,13 @@ ALLOWED_ORIGINS=http://localhost:5173
 ```
 
 4. **Validar configuración:**
+
 ```bash
 node validate-env.js
 ```
 
 5. **Iniciar el servidor:**
+
 ```bash
 # Modo desarrollo (con nodemon)
 npm run dev
@@ -212,16 +237,19 @@ El servidor estará disponible en: `http://localhost:8080`
 ## 🧪 Pruebas
 
 ### Verificar que el servidor funciona:
+
 ```bash
 curl http://localhost:8080/health
 ```
 
 ### Probar el endpoint raíz:
+
 ```bash
 curl http://localhost:8080/
 ```
 
 ### Login de ejemplo:
+
 ```bash
 curl -X POST http://localhost:8080/auth/login \
   -H "Content-Type: application/json" \
@@ -274,6 +302,7 @@ catalogoProductosBackend/
 ### Railway
 
 Ver guías detalladas:
+
 - **[RAILWAY_SETUP.md](RAILWAY_SETUP.md)** - Guía completa paso a paso
 - **[RAILWAY_FIX.md](RAILWAY_FIX.md)** - Solución rápida de problemas
 - **[DEPLOY.md](DEPLOY.md)** - Información general de despliegue
@@ -285,6 +314,7 @@ Ver guías detalladas:
 3. Railway desplegará automáticamente
 
 **Variables requeridas en Railway:**
+
 ```
 NODE_ENV=production
 PORT=8080

@@ -6,8 +6,8 @@ const cookieParser = require("cookie-parser");
 const app = express();
 
 // Middlewares - en orden correcto
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",")
+const allowedOrigins = process.env.FRONTEND_URL
+  ? [process.env.FRONTEND_URL]
   : ["http://localhost:5173"];
 
 app.use(

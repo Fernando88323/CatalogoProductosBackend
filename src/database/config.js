@@ -7,16 +7,24 @@ const pool = mysql.createPool({
   password: process.env.PSW,
   database: process.env.DB,
   multipleStatements: true,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  enableKeepAlive: true,
+  keepAliveInitialDelay: 0,
 });
 
 // (Opcional) probar conexión al arrancar
 (async () => {
   try {
     const conn = await pool.getConnection();
+    console.log("✅ Conectado a la DB:", process.env.DB);
     conn.release();
-    console.log("✅ Conectado a la DB");
   } catch (err) {
-    console.error("❌ Error de conexión a la DB:", err);
+    console.error("❌ Error de conexión a la DB:", err.message);
+    if (process.env.NODE_ENV === "production") {
+      process.exit(1); // Salir en producción si no hay conexión
+    }
   }
 })();
 

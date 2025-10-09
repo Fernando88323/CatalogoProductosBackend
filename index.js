@@ -62,8 +62,15 @@ app.use((err, req, res, next) => {
 });
 
 // Levantando el servidor
-const PORT = process.env.PORT || 4001;
+const PORT = parseInt(process.env.PORT) || 4001;
 const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
+
+// Validar que PORT es un número válido
+if (isNaN(PORT) || PORT < 1 || PORT > 65535) {
+  console.error("❌ ERROR: PORT debe ser un número entre 1 y 65535");
+  console.error("   Valor actual:", process.env.PORT);
+  console.error("   Usando puerto por defecto: 4001");
+}
 
 app.listen(PORT, HOST, () => {
   console.log("=".repeat(50));

@@ -1,16 +1,19 @@
 # 🚨 SOLUCIÓN RÁPIDA: Error "Application failed to respond" en Railway
 
 ## Error:
+
 ```
 Application failed to respond
 ```
 
 O también:
+
 ```
 ❌ Error de conexión a la DB: connect ECONNREFUSED ::1:3306
 ```
 
 ## Causa:
+
 Railway NO está leyendo las variables de entorno porque el archivo `.env` no se sube a Git. La aplicación se inicia pero no puede conectarse a la base de datos.
 
 ---
@@ -27,12 +30,14 @@ Railway NO está leyendo las variables de entorno porque el archivo `.env` no se
 6. Ve a **"View Logs"**
 
 **¿Qué buscar en los logs?**
+
 - Si ves `❌ NO CONFIGURADO` para las variables → Falta configurar variables de entorno
 - Si dice "Application failed to respond" → El servidor no se está iniciando correctamente
 
 ### 2️⃣ Encontrar las Credenciales de MySQL en Railway
 
 **IMPORTANTE:** Railway tiene 2 servicios en tu proyecto:
+
 - 🟦 Servicio de **Node.js** (tu backend)
 - 🟩 Servicio de **MySQL** (tu base de datos)
 

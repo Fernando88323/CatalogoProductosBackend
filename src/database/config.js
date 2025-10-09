@@ -41,11 +41,13 @@ const pool = mysql.createPool(dbConfig);
       "   DATABASE_URL:",
       process.env.DATABASE_URL ? "✅ CONFIGURADO" : "❌ NO CONFIGURADO"
     );
-    
-    console.error("\n⚠️  ATENCIÓN: La aplicación continuará ejecutándose pero sin conexión a BD.");
+
+    console.error(
+      "\n⚠️  ATENCIÓN: La aplicación continuará ejecutándose pero sin conexión a BD."
+    );
     console.error("⚠️  Debes configurar las variables de entorno en Railway.");
     console.error("⚠️  Ve a: Railway Dashboard → Tu Proyecto → Variables\n");
-    
+
     // NO cerramos el proceso para que Railway pueda mostrar los logs
     // El usuario podrá ver qué variables faltan
   }

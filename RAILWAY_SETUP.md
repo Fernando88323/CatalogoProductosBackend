@@ -7,6 +7,7 @@
 1. Ve a https://railway.app
 2. Abre tu proyecto `CatalogoProductosBackend`
 3. Verás 2 servicios:
+
    - 🟦 **Node.js** (tu backend)
    - 🟩 **MySQL** (tu base de datos)
 
@@ -17,19 +18,23 @@
 ### ¿Qué verás en los logs?
 
 **Si ves esto:**
+
 ```
 ❌ Error de conexión a la DB: ...
    HOST: ❌ NO CONFIGURADO
    USER: ❌ NO CONFIGURADO
    DB_PORT: ❌ NO CONFIGURADO
 ```
+
 👉 **Necesitas configurar las variables de entorno**
 
 **Si ves esto:**
+
 ```
 ✅ Conectado a la DB: railway
 🚀 Servidor corriendo en 0.0.0.0:8080
 ```
+
 👉 **¡Todo funciona correctamente!**
 
 ---
@@ -53,6 +58,7 @@ MYSQLDATABASE = railway
 **📋 Copia estos valores** - los necesitarás en el siguiente paso.
 
 > **Nota:** Los nombres pueden variar:
+>
 > - `MYSQL_HOST` o `MYSQLHOST`
 > - `MYSQL_USER` o `MYSQLUSER`
 > - etc.
@@ -66,12 +72,14 @@ MYSQLDATABASE = railway
 Agrega estas variables **UNA POR UNA**:
 
 #### Variables del Sistema
+
 ```
 NODE_ENV = production
 PORT = 8080
 ```
 
 #### Variables de MySQL (usa los valores que copiaste)
+
 ```
 HOST = containers-us-west-123.railway.app
 USER = root
@@ -83,6 +91,7 @@ DB = railway
 ⚠️ **Reemplaza con tus valores reales del paso 2**
 
 #### Variables de Cloudinary
+
 ```
 CLOUD_NAME = drfxzdtxm
 API_KEY = 558114351582597
@@ -90,6 +99,7 @@ API_SECRET = xZEhyj12f9cUo1nRfzpTCfaz65Y
 ```
 
 #### Variables de Seguridad
+
 ```
 JWT_SECRET = catalogoProductosSecret2025
 ALLOWED_ORIGINS = https://tu-frontend-url.vercel.app
@@ -105,6 +115,7 @@ ALLOWED_ORIGINS = https://tu-frontend-url.vercel.app
 4. Ve a **"View Logs"** nuevamente
 
 **Deberías ver:**
+
 ```
 ✅ Conectado a la DB: railway
 🔧 Host: containers-us-west-123.railway.app
@@ -123,11 +134,13 @@ ALLOWED_ORIGINS = https://tu-frontend-url.vercel.app
 ### Método 1: Probar el Health Check
 
 Abre en tu navegador:
+
 ```
 https://catalogoproductosbackend-production-fcd1.up.railway.app/health
 ```
 
 Deberías ver:
+
 ```json
 {
   "status": "ok",
@@ -140,6 +153,7 @@ Deberías ver:
 ### Método 2: Probar un Endpoint
 
 Si tienes un endpoint público (como `/marcas`), pruébalo:
+
 ```
 https://catalogoproductosbackend-production-fcd1.up.railway.app/marcas
 ```
@@ -153,6 +167,7 @@ https://catalogoproductosbackend-production-fcd1.up.railway.app/marcas
 **Causa:** El servidor no se está iniciando correctamente
 
 **Solución:**
+
 1. Ve a los logs en Railway
 2. Busca mensajes de error
 3. Verifica que TODAS las variables estén configuradas
@@ -163,6 +178,7 @@ https://catalogoproductosbackend-production-fcd1.up.railway.app/marcas
 **Causa:** Las credenciales de MySQL son incorrectas
 
 **Solución:**
+
 1. Ve al servicio de MySQL en Railway
 2. Copia las credenciales exactas
 3. Ve al servicio de Node.js → Variables
@@ -174,6 +190,7 @@ https://catalogoproductosbackend-production-fcd1.up.railway.app/marcas
 **Causa:** `ALLOWED_ORIGINS` no incluye tu frontend
 
 **Solución:**
+
 1. Ve a Variables en el servicio de Node.js
 2. Encuentra `ALLOWED_ORIGINS`
 3. Agrega la URL de tu frontend:
@@ -202,6 +219,7 @@ https://catalogoproductosbackend-production-fcd1.up.railway.app/marcas
 ## 🎉 ¡Listo!
 
 Tu backend debería estar funcionando correctamente en:
+
 ```
 https://catalogoproductosbackend-production-fcd1.up.railway.app
 ```
@@ -213,6 +231,7 @@ Ahora puedes conectar tu frontend con esta URL.
 ## 📞 Ayuda Adicional
 
 Si sigues teniendo problemas:
+
 1. Revisa los logs completos en Railway
 2. Verifica que las variables estén bien escritas (sin espacios extra)
 3. Asegúrate de que MySQL está corriendo

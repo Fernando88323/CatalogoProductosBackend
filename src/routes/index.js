@@ -7,4 +7,6 @@ router.use("/marcas", require("./marcas/marcas.routes"));
 
 router.use("/upload", require("./uploadRoutes/upload.routes"));
 
+router.use("/auth", require("../routes/login/login.routes"));
+
 module.exports = router;

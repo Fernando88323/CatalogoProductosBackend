@@ -4,7 +4,7 @@ const router = express.Router();
 // Ruta de bienvenida / API info
 router.get("/", (req, res) => {
   res.status(200).json({
-    message: "🚀 API Catálogo de Productos - Backend",
+    message: "API Catálogo de Productos - Backend",
     version: "1.0.0",
     status: "online",
     timestamp: new Date().toISOString(),

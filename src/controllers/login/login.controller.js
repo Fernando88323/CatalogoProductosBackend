@@ -84,11 +84,14 @@ const loginUser = async (req, res) => {
     const accessToken = generateToken(user.id, user.email);
 
     console.log("✅ Login exitoso para usuario:", email);
-    console.log("🔑 Token generado (primeros caracteres):", accessToken.substring(0, 20) + "...");
+    console.log(
+      "🔑 Token generado (primeros caracteres):",
+      accessToken.substring(0, 20) + "..."
+    );
 
     // Para aplicaciones cross-domain (Railway + Vercel), es mejor enviar el token
     // en el body en lugar de cookies, ya que las cookies tienen restricciones CORS
-    
+
     // Opción 1: Establecer cookie (funciona solo en mismo dominio o con configuración especial)
     res.cookie("accessToken", accessToken, {
       httpOnly: true, // No accesible desde JavaScript del cliente

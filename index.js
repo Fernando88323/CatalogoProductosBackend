@@ -10,7 +10,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim())
   : ["http://localhost:5173"];
 
-console.log("🔧 CORS configurado para:", allowedOrigins);
+// console.log("CORS configurado para:", allowedOrigins);
 
 app.use(
   cors({
@@ -25,7 +25,7 @@ app.use(
         console.error(msg);
         return callback(new Error(msg), false);
       }
-      console.log("✅ CORS: Origen permitido:", origin);
+      // console.log("CORS: Origen permitido:", origin);
       return callback(null, true);
     },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -63,15 +63,15 @@ const HOST = process.env.NODE_ENV === "production" ? "0.0.0.0" : "localhost";
 
 // Validar que PORT es un número válido
 if (isNaN(PORT) || PORT < 1 || PORT > 65535) {
-  console.error("❌ ERROR: PORT debe ser un número entre 1 y 65535");
+  console.error("ERROR: PORT debe ser un número entre 1 y 65535");
   console.error("   Valor actual:", process.env.PORT);
   console.error("   Usando puerto por defecto: 4001");
 }
 
 app.listen(PORT, HOST, () => {
   console.log("=".repeat(50));
-  console.log(`🚀 Servidor corriendo en ${HOST}:${PORT}`);
-  console.log(`📝 Modo: ${process.env.NODE_ENV || "development"}`);
-  console.log(`🔗 Health check: http://${HOST}:${PORT}/health`);
+  console.log(`Servidor corriendo en ${HOST}:${PORT}`);
+  console.log(`Modo: ${process.env.NODE_ENV || "development"}`);
+  console.log(`Health check: http://${HOST}:${PORT}/health`);
   console.log("=".repeat(50));
 });
